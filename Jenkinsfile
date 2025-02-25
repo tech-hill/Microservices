@@ -6,7 +6,7 @@ pipeline {
             steps {
                 script {
                     withKubeConfig([credentialsId: 'k8-token']) {
-                        sh "kubectl apply -f deployment-service.yml"
+                        sh "kubectl apply -f deployment-service.yml  --validate=false"
                     }
                 }
             }
@@ -16,7 +16,7 @@ pipeline {
             steps {
                 script {
                     withKubeConfig([credentialsId: 'k8-token']) {
-                        sh "kubectl get svc -n webapps"
+                        sh "kubectl get svc -n webapps --validate=false"
                     }
                 }
             }
