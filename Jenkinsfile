@@ -6,6 +6,7 @@ pipeline {
             steps {
                 withKubeCredentials(kubectlCredentials: [[caCertificate: '', clusterName: 'EKS-1', contextName: '', credentialsId: 'k8-token', namespace: 'webapps', serverUrl: 'https://A389FBA1D7C3CE9B6D6743343111955C.gr7.us-east-1.eks.amazonaws.com']]) {
                     sh "kubectl get nodes"
+                    sh "kubectl config view"
                 }
             }
         }
