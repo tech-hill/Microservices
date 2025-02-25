@@ -1,15 +1,20 @@
 pipeline {
     agent any
-    environment {
-        KUBECONFIG = credentials('k8-token') // Ensure this credential exists
-    }
+
     stages {
         stage('Deploy To Kubernetes') {
             steps {
-                script {
-                    withKubeCredentials([credentialsId: 'k8-token', namespace: 'webapps']) {
-                        // Your kubectl deployment logic
-                    }
+                withKubeCredentials(kubectlCredentials: [[caCertificate: '', clusterName: 'EKS-1', contextName: '', credentialsId: 'k8-token', namespace: 'webapps', serverUrl: 'https://A389FBA1D7C3CE9B6D6743343111955C.gr7.us-east-1.eks.amazonaws.com']]) {
+                    sh "kubectl apply -f deployment-service.yml"
+                    
+                }
+            }
+        }
+        
+        stage('verify Deployment') {
+            steps {
+                withKubeCredentials(kubectlCredentials: [[caCertificate: '', clusterName: 'EKS-1', contextName: '', credentialsId: 'k8-token', namespace: 'webapps', serverUrl: 'https://A389FBA1D7C3CE9B6D6743343111955C.gr7.us-east-1.eks.amazonaws.com']]) {
+                    sh "kubectl get svc -n webapps"
                 }
             }
         }
